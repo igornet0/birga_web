@@ -1,0 +1,88 @@
+.stock-table {
+    color: black; /* Цвет текста */
+    cursor: pointer; /* Изменение курсора при наведении */
+    padding: auto;
+}
+
+#vxod_l {
+    flex: 1;
+    margin-left: 5%;
+}
+
+#list_news {
+    width: 720px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+}
+
+#news {
+    flex: 1;
+    display: inline-block;
+    width: 700px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    font-size: 80%;
+}
+
+#balance_list {
+    width: 100px;
+    border: 1px solid #ccc;
+}
+
+#stocks {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    color: #fff;
+}
+
+.scrollable-trans_stock {
+    height: 150px; /* Высота окошка */
+    width: 570px;
+    overflow: auto; /* Разрешить прокрутку */
+    border: 1px solid #ccc; /* Граница окошка */
+}
+
+#balance_valyte{
+    margin-left: 0px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+body {
+    background-color: #6666ff;
+}
+
+p {
+    font-size: 120%;
+    color: #fff;
+}
+
+button {
+    color: #fff;
+    border-radius: 12px;
+    background: #906bff;
+    border: 0;
+    font-size: 120%;
+}
+
+input {
+    color: #fff;
+    background: #906bff;
+    font-size: 120%;
+    border: 0;
+    border-radius: 12px;
+}
+
+select {
+    color: #fff;
+    background: #906bff;
+    border-radius: 12px;
+    font-size: 120%;
+}

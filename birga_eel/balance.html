@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Birga</title>
+    <script src="eel.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div>
+        <p>Пополнение</p>
+        <p>Выбирите валюту</p>
+        <select id="valyte">
+            <option value="balance_rub">₽</option>
+            <option value="balance_cny">¥</option>
+            <option value="balance_usd">$</option>
+            <option value="balance_eur">€</option>
+          </select>
+        <p>Введите сумму</p>
+        <input type="text" id="sum" required><br><br>
+        <button id="balance">Пополнить</button><br>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript">
+        async function add_balance(){
+            let valyte = document.getElementById('valyte').value;
+            let sum = document.getElementById('sum').value;
+            await eel.add_balance(valyte, sum);
+            window.close();
+        }
+
+        $('#balance').click(function(){
+            add_balance();
+        });
+    </script>
+</body>
+</html>

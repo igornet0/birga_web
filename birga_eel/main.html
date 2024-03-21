@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Birga</title>
+    <script src="eel.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript">
+        async function get_news(){
+            let news = await eel.get_news()();
+            let list_news = document.getElementById("list_news");
+            for(let new_l of news){
+                var news_div = document.createElement("div");
+                news_div.id = "news";
+                var newp_text = document.createElement("p");
+                var newp_datetime = document.createElement("p");
+                newp_text.innerHTML = new_l["text_new"];
+                newp_datetime.innerHTML = new_l["datetime"];
+                news_div.appendChild(newp_datetime);
+                news_div.appendChild(newp_text);
+                list_news.appendChild(news_div);
+            }
+        }
+        window.onload = get_news;
+    </script>
+</head>
+<body>
+    <header>
+        <div id="list_news">
+            <p>Новости</p>
+        </div>
+        <div id="vxod_l">
+            <p>Вход</p>
+            <input type="text" id="login" required><br><br>
+            <input type="password" id="password" required><br>
+            <p id="result"></p>
+            <button id="vxod">Войти</button><br><br>
+            <button id="reg">Регистрация</button>
+        </div>
+    </header>   
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript">
+        async function vxod(){
+            let login = document.getElementById('login').value;
+            let password = document.getElementById('password').value;
+
+            if (!login) {
+                event.preventDefault();
+                alert('Пожалуйста, заполните поле "Логин"');
+                return;
+            }
+            if (!password) {
+                event.preventDefault();
+                alert('Пожалуйста, заполните поле "Пароль"');
+                return;
+            }
+
+            let result = await eel.vxod_api(login, password)();
+
+            if (result[0]){
+                window.location.href = 'profile.html';
+            } else {
+                document.getElementById('result').innerHTML = result[1];
+                document.getElementById('password').value = '';
+            }
+        }
+        document.getElementById("password").onchange = function() {
+            vxod();
+        };
+
+        $('#vxod').click(function(){
+            vxod();
+        });
+
+        $('#reg').click(function(){
+            window.location.href = 'regist.html';
+        });
+
+
+    </script>
+</body>
+</html>

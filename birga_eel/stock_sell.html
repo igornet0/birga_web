@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Birga</title>
+    <script src="eel.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript">
+        async function get_sell(){
+            var id_stock = localStorage.getItem("id_stock");
+            let result = await eel.get_info_stock(id_stock, true)();
+            let info_stock = result[0];
+            let valyte = result[1];
+            let price = info_stock["price"];
+            let lot = info_stock["lot"];
+            document.getElementById('lot_stocks').innerHTML = `1 лот - ${lot}шт`;
+            document.getElementById('price').innerHTML = `${price}${valyte}`;
+            document.getElementById('suma').innerHTML = `${(price*lot).toFixed(2)}${valyte}`;
+        }
+        window.onload = get_sell;
+    </script>
+</head>
+<body>
+    <div>
+        <p>Кол-во лотов:</p>
+        <input type="number" id="lot" value="1" required><br>
+        <p id="lot_stocks"></p>
+        <p>Цена:</p>
+        <p id="price"></p>
+        <p>Сумма:</p>
+        <p id="suma"></p>
+        <button id="sell_stock">Продать</button>
+        <p id="result"></p>
+    </div>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript">
+        async function sell_stock(id_stock){
+            let lot = document.getElementById('lot').value;
+            var id_stock = localStorage.getItem("id_stock");
+
+            let result = await eel.trans_stok(id_stock, lot, 0)();
+            if (result){
+                result_mes = "Транзакция выполнена";
+            } else {
+                result_mes = "Не хватает денег на балансе";
+            }
+            document.getElementById('result').innerHTML = result_mes;
+            if(result){
+                window.close();
+            }
+        }
+
+        async function update_suma(){
+            let lot = document.getElementById('lot').value;
+            var id_stock = localStorage.getItem("id_stock");
+            let result = await eel.suma_stock_lot(id_stock, lot)();
+            let suma = result[0];
+            let lot_stocks = result[1];
+            document.getElementById('lot_stocks').innerHTML = lot_stocks;
+            document.getElementById('suma').innerHTML = suma;
+        }
+
+        $("#lot").on("input", function(){
+            update_suma();
+        });
+
+        $("#sell_stock").click(function(){
+            sell_stock($(this).attr("id"));
+        });
+       
+    </script>
+</body>
+</html>

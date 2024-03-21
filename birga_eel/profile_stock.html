@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Birga</title>
+    <script src="eel.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript">
+        async function profile_stock() {
+            let user = await eel.user_profile_stock()();
+            let stocks = await eel.stock_profile_stock()();
+
+            let table = document.getElementById("stocks");
+            if (stocks.length == 0){
+                document.getElementById("table_stocks").remove();
+                document.getElementById("message_stock").innerHTML = "Акций нет, соверщите сделку";
+            } else {
+                for (let stock of stocks){
+                    let row = table.insertRow(table.rows.length); 
+                    row.id = stock.shift();
+                    row.className = "stock-table";
+                    for (let info of stock){
+                        var newtd = document.createElement("td");
+                        newtd.innerHTML = info;
+                        row.appendChild(newtd);
+                    }
+                }
+            }
+
+            document.getElementById('id').innerHTML = "Номер профеля: " + user["id_user"];
+            let list = [user["balance_rub"], user["balance_eur"], user["balance_cny"], user["balance_usd"]];
+            if (list.reduce((a,b)=>a+b) == 0){
+                document.getElementById('balance').innerHTML = "На вашем счету нет денег, пополните баланс";
+            } else {
+                let valyte = ["₽", "€", "¥", "$"]
+                for(let i of Array(4).keys()){
+                    if (list[i] != 0){
+                        let p = document.createElement("p");
+                        p.id = "balance_valyte";
+                        p.innerHTML =`${list[i]}${valyte[i]}`;
+                        document.getElementById('balance_list').appendChild(p);   
+                    }
+                }
+            }
+        }
+        window.onload = profile_stock;
+        </script>
+</head>
+<body>
+    <div>
+        <p id="id"></p>
+        <p>Портфель</p>
+        <p>Баланс:</p>
+        <div id="balance_list">
+        </div><br>
+        <button id="balance">Пополнить</button><br><br>
+        <p>Акции</p>
+        <p id="message_stock"></p>
+        <div id="table_stocks">
+            <table id="stocks">
+                <tr>
+                    <th>id</th>
+                    <th>Название</th>
+                    <th>Цена</th>
+                    <th>Кол-во</th>
+                    <th>Сумма</th>
+                </tr>    
+            </table>
+        </div>
+        <button id="list_stock">Список акциий</button><br><br>
+        <button id="profile">Профиль</button><br>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript">
+        async function add_balance(){
+            let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=0,height=0,left=-1000,top=-1000`;
+            window.open("balance.html", "Пополнение", params);
+        }
+
+        async function stock(id_stock){
+            localStorage.setItem("id_stock", id_stock);
+            let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=0,height=0,left=-1000,top=-1000`;
+            window.open("stock.html", id_stock, params);
+        }
+
+        $('#balance').click(function(){
+            add_balance();
+        });
+        $('#profile').click(function(){
+            window.location.href = "profile.html";
+        });
+        $(document).on('click', '.stock-table', function () {
+            stock($(this).attr("id"));
+        });
+        $('#list_stock').click(function(){
+            window.location.href = "stock_list.html";
+        });
+    </script>
+</body>
+</html>

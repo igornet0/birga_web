@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Birga</title>
+    <script src="eel.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript">
+        async function profile_process() {
+            let result = await eel.profile_process()();
+
+            document.getElementById('id').innerHTML = "Номер профеля: " + result["id_user"];
+            document.getElementById('login').innerHTML = "Логин: " + result["login"];
+            document.getElementById('name').innerHTML = "Имя пользователя: " + result["name"];
+
+            let list = [result["balance_rub"], result["balance_eur"], result["balance_cny"], result["balance_usd"]];
+            if (list.reduce((a,b)=>a+b) == 0){
+                document.getElementById('balance').innerHTML = "На вашем счету нет денег, пополните баланс";
+            } else {
+                let list = [result["balance_rub"], result["balance_eur"], result["balance_cny"], result["balance_usd"]];
+                let valyte = ["₽", "€", "¥", "$"]
+                for(let i of Array(4).keys()){
+                    if (list[i] != 0){
+                        let p = document.createElement("p");
+                        p.id = "balance_valyte";
+                        p.innerHTML =`${list[i]}${valyte[i]}`;
+                        document.getElementById('balance_list').appendChild(p);   
+                    }
+                }
+            }
+        }
+        window.onload = profile_process;
+
+        </script>
+</head>
+<body>
+    <div>
+        <p>Профиль</p>
+        <p id="id"></p>
+        <p id="id"></p>
+        <p id="login"></p>
+        <p id="name"></p>
+        <button id="replace_password">Сменить пароль</button><br><br>
+        <button id="exit">Выйти</button><br>
+        <p>Баланс:</p>
+        <div id="balance_list">
+        </div>
+        <button id="balance">Пополнить</button><br><br>
+        <button id="profile_stock">Портфель</button><br>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript">
+        function add_balance(){
+            let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=0,height=0,left=-1000,top=-1000`;
+            window.open("balance.html", "Пополнение", params);
+        }
+        function replace_password(){
+            let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=0,height=0,left=-1000,top=-1000`;
+            window.open("replace_password.html", "Смена пароля", params);
+        }
+
+        $('#balance').click(function(){
+            add_balance();
+        });
+        $('#exit').click(async function(){
+            await eel.exit()();
+            window.location.href = "main.html";
+        });
+        $('#profile_stock').click(function(){
+            window.location.href = "profile_stock.html";
+        });
+        $('#replace_password').click(function(){
+            replace_password();
+        });
+    </script>
+</body>
+</html>

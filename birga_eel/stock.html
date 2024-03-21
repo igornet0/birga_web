@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Birga</title>
+    <script src="eel.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript">
+        async function get_info_stock(){
+            var id_stock = localStorage.getItem("id_stock");
+            let info = await eel.get_info_stock(id_stock)();
+            
+            document.getElementById('name_stock').innerHTML = "Название: " + info["name"];
+            document.getElementById('info_stock').innerHTML = info["info"];
+            document.getElementById('price_stock').innerHTML = "Цена: " + info["price"];
+
+            let trans = await eel.get_trans_stock(id_stock)();
+
+            if (trans.length == 0){
+                document.getElementById("trans").remove();
+                document.getElementById("message_tran").innerHTML = "Транзакций нет, соверщите сделку";
+                return
+            }
+            let table = document.getElementById("trans_list");
+            for (trans_dict of trans){
+                let row = table.insertRow(table.rows.length); 
+                for (const [key, value] of Object.entries(trans_dict)) {
+                    var newtd = document.createElement("td");
+                    newtd.innerHTML = value;
+                    row.appendChild(newtd);
+                }
+            }
+        }
+        window.onload = get_info_stock;
+    </script>
+</head>
+<body>
+    <div>
+        <button id="portfile_back">Портфель</button>
+        <p id="name_stock"></p>
+        <p id="info_stock"></p>
+        <p id="price_stock"></p>
+        <p>История:</p>
+        <p id="message_tran"></p>
+        <div id="trans" class="scrollable-trans_stock">
+            <table id="trans_list">
+                <tr>
+                    <th>Номер</th>
+                    <th>Тип</th>
+                    <th>Дата</th>
+                    <th>Кол-во лотов</th>
+                    <th>Цена</th>
+                    <th>Сумма</th>
+                </tr>
+            </table>
+        </div>
+        <br>
+        <button id="buy_stock">Купить</button>
+        <button id="sell_stock">Продать</button>
+    </div>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript">
+        async function buy_stock(){
+            var id_stock = localStorage.getItem("id_stock"); 
+            let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=0,height=0,left=-1000,top=-1000`;
+            window.open("stock_buy.html", id_stock, params);
+        }
+
+        async function sell_stock(){
+            var id_stock = localStorage.getItem("id_stock"); 
+            let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=0,height=0,left=-1000,top=-1000`;
+            window.open("stock_sell.html", id_stock, params);
+        }
+
+        $("#portfile_back").click(function(){
+            window.location.href = "profile_stock.html";
+        });
+        $("#buy_stock").click(function(){
+            buy_stock();
+        });
+        $("#sell_stock").click(function(){
+            sell_stock();
+        });
+    </script>
+</body>
+</html>

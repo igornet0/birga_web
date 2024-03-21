@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Birga</title>
+    <script src="eel.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript">
+        async function get_list_stock(){
+            let list_stocks = await eel.get_list_stock()();
+
+            let table = document.getElementById("stocks");
+            for (let stock of list_stocks){
+                let row = table.insertRow(table.rows.length); 
+                row.id = stock.shift();
+                row.className = "stock-table";
+                for (let info of stock){
+                    var newtd = document.createElement("td");
+                    newtd.innerHTML = info;
+                    row.appendChild(newtd);
+                }
+            }
+            let news = await eel.get_news(6)();
+            let list_news = document.getElementById("list_news");
+            for(let new_l of news){
+                var news_div = document.createElement("div");
+                news_div.id = "news";
+                var newp_text = document.createElement("p");
+                var newp_datetime = document.createElement("p");
+                newp_text.innerHTML = new_l["text_new"];
+                newp_datetime.innerHTML = new_l["datetime"];
+                news_div.appendChild(newp_datetime);
+                news_div.appendChild(newp_text);
+                list_news.appendChild(news_div);
+            }
+        }
+        window.onload = get_list_stock;
+    </script>
+</head>
+<body>
+    <header>
+        <div id="list_news">
+            <p>Новости</p>
+        </div>
+        <div id="vxod_l">
+            <p>Список акциий</p>
+            <table id="stocks">
+                <tr>
+                    <th>id</th>
+                    <th>Название</th>
+                    <th>Цена</th>
+                </tr>    
+            </table>
+            <br>
+        </div>
+    </header>   
+    <button id="portfile_back">Портфель</button>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript">
+        async function stock(id_stock){
+            localStorage.setItem("id_stock", id_stock);
+            let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=0,height=0,left=-1000,top=-1000`;
+            window.open("stock.html", id_stock, params);
+        }
+
+        $("#portfile_back").click(function(){
+            window.location.href = "profile_stock.html";
+        });
+        $(document).on('click', '.stock-table', function () {
+            stock($(this).attr("id"));
+        });
+    </script>
+</body>
+</html>
